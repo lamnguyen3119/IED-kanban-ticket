@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TC - IED Quote Tracker | WebUI Preview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            brand: {50:'#eef4ff',100:'#d9e6ff',200:'#bcd3ff',500:'#3366ff',600:'#1a47e6',700:'#1538b8'},
+            tcm: {sidebar:'#1b2430',sidebarActive:'#2a3950',sidebarText:'#94a3b8',bg:'#f4f6f8',border:'#e2e8f0',text:'#1e293b'}
+          },
+          boxShadow: { card:'0 1px 3px rgba(15,23,42,.08)', float:'0 16px 45px rgba(15,23,42,.14)' }
+        }
+      }
+    }
+  </script>
+  <style>
+    body{font-family:Inter,system-ui,sans-serif}.screen{display:none}.screen.active{display:block;animation:fade .16s ease-out}@keyframes fade{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}.nav.active{background:#2a3950;color:#fff}.kanban::-webkit-scrollbar{height:9px}.kanban::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:999px}
+  </style>
+</head>
+<body class="bg-tcm-bg text-tcm-text">
+<div class="min-h-screen lg:flex">
+  <aside class="fixed inset-y-0 left-0 z-30 hidden w-72 flex-col bg-tcm-sidebar text-white lg:flex">
+    <div class="flex h-20 items-center gap-3 border-b border-white/10 px-6">
+      <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-brand-500 text-lg font-extrabold">TC</div>
+      <div><div class="text-xs font-bold uppercase tracking-[.22em] text-slate-400">WebUI Preview</div><div class="font-extrabold">IED Quote Tracker</div></div>
+    </div>
+    <div class="px-5 py-4"><div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm leading-6 text-slate-300"><b class="text-white">Leadership demo</b><br/>Mock data • No backend • Clickable UI</div></div>
+    <nav class="flex-1 space-y-1 px-4">
+      <button class="nav active w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="overview">📌 Executive Overview</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="kanban">🧩 Kanban tổng quan</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="create">➕ Sale tạo yêu cầu</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="sale">📄 Sale: yêu cầu của tôi</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="queue">👷 IED queue</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="lead">⚖️ Team Lead workload</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="dashboard">📊 Manager dashboard</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="admin">⚙️ Admin config</button>
+      <button class="nav w-full rounded-xl px-4 py-3 text-left text-sm font-bold text-tcm-sidebarText hover:bg-white/10" data-screen="detail">🔎 Ticket detail</button>
+    </nav>
+    <div class="border-t border-white/10 p-5 text-xs leading-5 text-slate-400">Mục tiêu: giảm hỏi đáp tiến độ qua chat/email bằng visibility: owner, queue, status, ETA.</div>
+  </aside>
+
+  <main class="min-h-screen lg:ml-72 lg:w-[calc(100%-18rem)]">
+    <header class="sticky top-0 z-20 border-b border-tcm-border bg-white/85 backdrop-blur-xl">
+      <div class="flex flex-col gap-3 px-5 py-4 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+        <div><div class="text-xs font-extrabold uppercase tracking-[.22em] text-brand-700">TC • Industrial Engineering Department</div><h1 id="title" class="mt-1 text-2xl font-extrabold">Executive Overview</h1></div>
+        <div class="flex flex-wrap gap-2"><span class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-extrabold text-emerald-700 ring-1 ring-emerald-200">For leadership review</span><span class="rounded-full bg-brand-50 px-3 py-1 text-xs font-extrabold text-brand-700 ring-1 ring-brand-200">Clickable mockup</span></div>
+      </div>
+      <div class="flex gap-2 overflow-x-auto border-t border-slate-200 bg-white px-4 py-3 lg:hidden">
+        <button class="mob whitespace-nowrap rounded-full bg-slate-900 px-3 py-2 text-xs font-bold text-white" data-screen="overview">Overview</button><button class="mob whitespace-nowrap rounded-full bg-slate-100 px-3 py-2 text-xs font-bold" data-screen="kanban">Kanban</button><button class="mob whitespace-nowrap rounded-full bg-slate-100 px-3 py-2 text-xs font-bold" data-screen="create">Create</button><button class="mob whitespace-nowrap rounded-full bg-slate-100 px-3 py-2 text-xs font-bold" data-screen="dashboard">Dashboard</button><button class="mob whitespace-nowrap rounded-full bg-slate-100 px-3 py-2 text-xs font-bold" data-screen="detail">Detail</button>
+      </div>
+    </header>
+
+    <div class="px-5 py-6 lg:px-8 lg:py-8">
+      <section id="overview" class="screen active">
+        <div class="relative overflow-hidden rounded-[2rem] bg-slate-950 p-8 text-white shadow-float">
+          <div class="absolute right-0 top-0 h-72 w-72 -translate-y-28 translate-x-20 rounded-full bg-brand-500/40 blur-3xl"></div>
+          <div class="relative grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
+            <div>
+              <div class="inline-flex rounded-full border border-white/15 bg-white/10 px-4 py-2 text-sm font-bold text-slate-200">IED CM Quote Tracker</div>
+              <h2 class="mt-6 text-4xl font-extrabold leading-tight lg:text-5xl">Theo dõi yêu cầu báo giá CM: rõ owner, rõ hàng đợi, rõ ETA.</h2>
+              <p class="mt-5 max-w-2xl text-lg leading-8 text-slate-300">WebUI preview để sếp tổng ngó nhanh flow: Sale tạo ticket, tự phân IED, Team Lead san tải, Manager xem SLA dashboard.</p>
+              <div class="mt-7 flex flex-wrap gap-3"><button data-go="kanban" class="rounded-2xl bg-brand-500 px-5 py-3 text-sm font-extrabold hover:bg-brand-600">Xem Kanban</button><button data-go="dashboard" class="rounded-2xl bg-white/10 px-5 py-3 text-sm font-extrabold ring-1 ring-white/20 hover:bg-white/15">Xem Dashboard</button></div>
+            </div>
+            <div class="rounded-[1.75rem] bg-white p-5 text-slate-900 shadow-2xl">
+              <div class="flex items-center justify-between"><div><div class="text-sm font-bold text-slate-500">Today snapshot</div><div class="mt-1 text-2xl font-extrabold">Queue health</div></div><span class="rounded-2xl bg-emerald-50 px-3 py-2 text-xs font-extrabold text-emerald-700">MOCK</span></div>
+              <div class="mt-5 grid grid-cols-2 gap-3">
+                <div class="rounded-2xl bg-slate-50 p-4 ring-1 ring-slate-200"><div class="text-3xl font-extrabold">128</div><div class="text-xs font-bold text-slate-500">Requests / 30 days</div></div>
+                <div class="rounded-2xl bg-emerald-50 p-4 ring-1 ring-emerald-100"><div class="text-3xl font-extrabold text-emerald-700">94%</div><div class="text-xs font-bold text-emerald-700/70">ETA on-time</div></div>
+                <div class="rounded-2xl bg-amber-50 p-4 ring-1 ring-amber-100"><div class="text-3xl font-extrabold text-amber-700">12</div><div class="text-xs font-bold text-amber-700/70">Urgent open</div></div>
+                <div class="rounded-2xl bg-rose-50 p-4 ring-1 ring-rose-100"><div class="text-3xl font-extrabold text-rose-700">5</div><div class="text-xs font-bold text-rose-700/70">Waiting info</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 grid gap-4 md:grid-cols-4">
+          <div class="card"><b>Pain point</b><h3>Hỏi tiến độ qua chat</h3><p>Sale không biết ticket tới đâu, IED mất thời gian trả lời thủ công.</p></div>
+          <div class="card"><b>Control</b><h3>ETA tự tính</h3><p>Theo số style, loại yêu cầu, priority và queue trước đó.</p></div>
+          <div class="card"><b>Visibility</b><h3>Kanban theo IED</h3><p>Team Lead nhìn tải từng người để reassign khi kẹt.</p></div>
+          <div class="card"><b>Governance</b><h3>Dashboard SLA</h3><p>Manager xem demand, bottleneck, tỉ lệ đúng ETA.</p></div>
+        </div>
+        <div class="mt-6 rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-200"><h3 class="text-xl font-extrabold">Business flow</h3><div class="mt-5 grid gap-3 md:grid-cols-5"><div class="flow"><b>1. Sale tạo ticket</b><p>Buyer, styles, email ref</p></div><div class="flow"><b>2. Auto assign</b><p>Mapping Sale → IED</p></div><div class="flow"><b>3. IED xử lý</b><p>In Progress / Waiting Info</p></div><div class="flow"><b>4. Hoàn tất</b><p>Record completed time</p></div><div class="flow"><b>5. Dashboard</b><p>SLA & demand</p></div></div></div>
+      </section>
+
+      <section id="kanban" class="screen">
+        <div class="mb-5 grid gap-4 md:grid-cols-4"><div class="kpi"><span>Open tickets</span><b>36</b></div><div class="kpi"><span>Unassigned</span><b class="text-amber-600">4</b></div><div class="kpi"><span>Urgent</span><b class="text-rose-600">12</b></div><div class="kpi"><span>Avg wait</span><b class="text-brand-700">3.4h</b></div></div>
+        <div class="kanban overflow-x-auto pb-4"><div class="grid min-w-[1120px] grid-cols-4 gap-4">
+          <div class="col"><div class="colHead"><h3>Chưa phân</h3><span>4</span></div><article class="ticket"><div><b>QT-2026-0188</b><em>Urgent</em></div><p>Buyer: UNIQLO • 3 styles • AGS2</p><small>No mapping matched</small></article><article class="ticket"><div><b>QT-2026-0187</b><em>Normal</em></div><p>Buyer: GAP • 1 style • WGS1</p></article></div>
+          <div class="col"><div class="colHead"><h3>IED 01 • Lan</h3><span>9</span></div><article class="ticket border-l-4 border-brand-500"><div><b>QT-2026-0186</b><em>In Progress</em></div><p>Buyer: H&M • New quote • 2 styles</p><small>ETA: 16:30 • 07/07</small></article><article class="ticket bg-emerald-50 ring-emerald-100"><div><b>QT-2026-0182</b><em>Assigned</em></div><p>Highlighted: Sale đang login</p></article></div>
+          <div class="col"><div class="colHead"><h3>IED 02 • Oanh</h3><span>7</span></div><article class="ticket bg-amber-50 ring-amber-100"><div><b>QT-2026-0185</b><em>Waiting Info</em></div><p>Buyer: ZARA • Missing spec detail</p><small>Email sent to Sale</small></article><article class="ticket"><div><b>QT-2026-0179</b><em>Assigned</em></div><p>Buyer: M&S • 4 styles • Urgent</p></article></div>
+          <div class="col"><div class="colHead"><h3>IED 03 • Tuyền</h3><span>8</span></div><article class="ticket"><div><b>QT-2026-0181</b><em>Assigned</em></div><p>Buyer: Nike • New quote • 1 style</p></article><article class="ticket"><div><b>QT-2026-0172</b><em>Assigned</em></div><p>Buyer: Adidas • Revision</p></article></div>
+        </div></div>
+      </section>
+
+      <section id="create" class="screen">
+        <div class="grid gap-6 lg:grid-cols-[1fr_360px]"><div class="panel"><h2>Sale: Tạo yêu cầu báo giá CM</h2><p>Tài liệu kỹ thuật vẫn gửi email; form này chỉ tạo tracking ticket.</p><div class="mt-6 grid gap-4 md:grid-cols-2"><label>Buyer *<input value="H&M"></label><label>Số lượng style *<input value="2" type="number"></label><label>Sales team *<select><option>AGS1</option><option>AGS2</option><option>WGS1</option></select></label><label>Loại yêu cầu *<select><option>Báo giá mới</option><option>Hiệu chỉnh</option></select></label><label>Ưu tiên *<select><option>Khẩn cấp</option><option>Bình thường</option></select></label><label>Ngày mong muốn *<input value="2026-07-09" type="date"></label><label class="md:col-span-2">Email Ref *<input value="[CM Quote] H&M SS27 jacket - techpack attached"></label><label class="md:col-span-2">Note<textarea rows="4">Cần estimate sớm để kịp gửi buyer trong tuần.</textarea></label></div><button onclick="toast('Đã tạo mock ticket QT-2026-0189 và auto-assign IED 01')" class="mt-6 rounded-2xl bg-brand-600 px-5 py-3 text-sm font-extrabold text-white hover:bg-brand-700">Tạo ticket mock</button></div><aside class="rounded-3xl bg-slate-950 p-6 text-white shadow-float"><h3 class="text-lg font-extrabold">ETA preview</h3><div class="mt-5 space-y-3 text-sm"><div class="darkrow"><span>Request type</span><b>Báo giá mới</b></div><div class="darkrow"><span>Priority</span><b>Urgent</b></div><div class="darkrow"><span>Minutes/style</span><b>120</b></div><div class="darkrow"><span>Styles</span><b>2</b></div><div class="rounded-2xl bg-emerald-400/15 p-4 ring-1 ring-emerald-300/30"><div class="text-xs font-bold uppercase tracking-wider text-emerald-200">Estimated ETA</div><div class="mt-1 text-2xl font-extrabold text-emerald-100">15:30 • 08/07</div></div></div></aside></div>
+      </section>
+
+      <section id="sale" class="screen"><div class="panel"><h2>Sale: Yêu cầu của tôi</h2><p>Search theo buyer/email/status.</p><div class="mt-5 overflow-hidden rounded-2xl border border-slate-200"><table><tbody><tr><th>Ticket</th><th>Buyer</th><th>Status</th><th>IED</th><th>ETA</th></tr><tr><td>QT-2026-0182</td><td>H&M</td><td>Assigned</td><td>IED 01</td><td>16:30 • 07/07</td></tr><tr><td>QT-2026-0178</td><td>ZARA</td><td>Waiting Info</td><td>IED 02</td><td>Paused</td></tr><tr><td>QT-2026-0169</td><td>GAP</td><td>Completed</td><td>IED 03</td><td>Done</td></tr></tbody></table></div></div></section>
+
+      <section id="queue" class="screen"><div class="grid gap-6 lg:grid-cols-[1fr_360px]"><div class="panel"><h2>IED 01 — Hàng đợi của tôi</h2><p>Xếp theo priority trước, cùng priority thì FCFS.</p><div class="mt-6 space-y-4"><div class="queueitem"><b>Đang xử lý</b><h3>QT-2026-0186 • H&M • 2 styles</h3><button onclick="toast('Mock: completed')">Hoàn tất</button></div><div class="queueitem"><b class="text-rose-600">Next • Urgent</b><h3>QT-2026-0179 • M&S • 4 styles</h3><button onclick="toast('Mock: start ticket')">Bắt đầu</button></div><div class="queueitem"><b>Normal</b><h3>QT-2026-0174 • Target • Revision</h3><button>View</button></div></div></div><aside class="panel"><h3 class="text-lg font-extrabold">Quick rules</h3><div class="mt-4 space-y-3 text-sm text-slate-600"><div class="rounded-2xl bg-slate-50 p-4">IED chỉ cập nhật ticket được phân công.</div><div class="rounded-2xl bg-slate-50 p-4">Waiting Info dừng ETA tới khi Sale bổ sung.</div><div class="rounded-2xl bg-slate-50 p-4">Completed ghi nhận thời gian để đo SLA.</div></div></aside></div></section>
+
+      <section id="lead" class="screen"><div class="grid gap-4 md:grid-cols-4"><div class="work"><span>IED 01</span><b>9</b><i style="width:80%" class="bg-rose-500"></i></div><div class="work"><span>IED 02</span><b>7</b><i style="width:65%" class="bg-amber-500"></i></div><div class="work"><span>IED 03</span><b>8</b><i style="width:72%" class="bg-amber-500"></i></div><div class="work"><span>Unassigned</span><b>4</b><i style="width:30%" class="bg-brand-500"></i></div></div><div class="mt-6 panel"><h2>Team Lead control panel</h2><p>San tải, đổi priority, sửa ETA, tách request.</p><div class="mt-5 overflow-hidden rounded-2xl border border-slate-200"><table><tbody><tr><th>Ticket</th><th>Owner</th><th>Priority</th><th>ETA</th><th>Action</th></tr><tr><td>QT-2026-0188</td><td>Unassigned</td><td>Urgent</td><td>Pending</td><td>Reassign</td></tr><tr><td>QT-2026-0186</td><td>IED 01</td><td>Urgent</td><td>16:30</td><td>Override ETA</td></tr><tr><td>QT-2026-0179</td><td>IED 02</td><td>Urgent</td><td>08/07</td><td>Split</td></tr></tbody></table></div></div></section>
+
+      <section id="dashboard" class="screen"><div class="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><div><h2 class="text-2xl font-extrabold">Manager Dashboard</h2><p class="mt-1 text-sm text-slate-500">Demand, SLA, status, workload theo 24h / 30 ngày / 1 năm.</p></div><button onclick="toast('CSV mock exported')" class="rounded-xl bg-brand-600 px-4 py-2 text-sm font-bold text-white">Export CSV</button></div><div class="grid gap-5 lg:grid-cols-2"><div class="chart"><h3>ETA compliance</h3><canvas id="etaChart"></canvas></div><div class="chart"><h3>Status distribution</h3><canvas id="statusChart"></canvas></div><div class="chart"><h3>Created vs completed</h3><canvas id="trendChart"></canvas></div><div class="chart"><h3>Demand by Sales team</h3><canvas id="demandChart"></canvas></div></div></section>
+
+      <section id="admin" class="screen"><div class="grid gap-6 lg:grid-cols-[1fr_420px]"><div class="panel"><h2>Admin Config</h2><p>Mapping Sale-IED theo Sales team.</p><div class="mt-5 overflow-hidden rounded-2xl border border-slate-200"><table><tbody><tr><th>Sales team</th><th>Sale</th><th>Default IED</th><th>Team Lead</th></tr><tr><td>AGS1</td><td>Sale A</td><td>IED 01</td><td>Lead 01</td></tr><tr><td>AGS2</td><td>Sale B</td><td>IED 02</td><td>Lead 01</td></tr><tr><td>WGS1</td><td>Sale C</td><td>IED 03</td><td>Lead 02</td></tr></tbody></table></div></div><div class="panel"><h3 class="text-lg font-extrabold">ETA rules</h3><div class="mt-4 overflow-hidden rounded-2xl border border-slate-200"><table><tbody><tr><th>Type</th><th>Normal</th><th>Urgent</th></tr><tr><td>Báo giá mới</td><td>240</td><td>120</td></tr><tr><td>Hiệu chỉnh</td><td>120</td><td>60</td></tr></tbody></table></div><div class="mt-5 rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">Working calendar: T2–T6, 08:00–11:30 & 12:30–17:00.</div></div></div></section>
+
+      <section id="detail" class="screen"><div class="grid gap-6 lg:grid-cols-[1fr_380px]"><div class="panel"><div class="flex justify-between gap-4"><div><div class="text-sm font-bold text-brand-700">QT-2026-0186</div><h2>H&M • Báo giá mới • 2 styles</h2><p>Email ref: [CM Quote] H&M SS27 jacket - techpack attached</p></div><span class="h-fit rounded-full bg-brand-100 px-3 py-2 text-sm font-extrabold text-brand-700">In Progress</span></div><div class="mt-6 grid gap-4 md:grid-cols-4"><div class="mini"><span>Sale</span><b>Sale A</b></div><div class="mini"><span>Assigned IED</span><b>IED 01</b></div><div class="mini"><span>ETA</span><b>16:30 • 07/07</b></div><div class="mini"><span>Priority</span><b class="text-rose-700">Urgent</b></div></div><h3 class="mt-6 font-extrabold">Timeline</h3><div class="mt-4 space-y-4 border-l-2 border-slate-200 pl-5"><div class="timeline"><b>Submitted</b><p>07/07 08:20 • Sale A created ticket</p></div><div class="timeline"><b>Assigned</b><p>07/07 08:21 • Auto assigned to IED 01</p></div><div class="timeline"><b>In Progress</b><p>07/07 10:05 • IED 01 started analysis</p></div></div></div><aside class="space-y-4"><div class="panel"><h3 class="text-lg font-extrabold">Actions</h3><div class="mt-4 grid gap-2"><button onclick="toast('Mock: Waiting Info')" class="rounded-xl bg-amber-500 px-4 py-3 text-sm font-bold text-white">Chờ bổ sung</button><button onclick="toast('Mock: Completed')" class="rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white">Hoàn tất</button><button onclick="toast('Mock: Reassign modal')" class="rounded-xl bg-slate-900 px-4 py-3 text-sm font-bold text-white">Reassign</button><button onclick="toast('Mock: Split request modal')" class="rounded-xl bg-slate-100 px-4 py-3 text-sm font-bold text-slate-700">Split request</button></div></div><div class="rounded-3xl bg-slate-950 p-6 text-white shadow-float"><div class="text-xs font-bold uppercase tracking-wider text-slate-400">Permission model</div><p class="mt-3 text-sm leading-6 text-slate-300">Sale tạo ticket, IED được phân, Team Lead, Manager, Admin có quyền sửa theo rule đã chốt.</p></div></aside></div></section>
+    </div>
+  </main>
+</div>
+<div id="toast" class="fixed bottom-5 right-5 z-50 hidden max-w-sm rounded-2xl bg-slate-950 px-5 py-4 text-sm font-bold text-white shadow-2xl"></div>
+<script>
+  document.querySelectorAll('.card').forEach(e=>e.className='rounded-3xl bg-white p-5 shadow-card ring-1 ring-slate-200');document.querySelectorAll('.card h3').forEach(e=>e.className='mt-2 text-xl font-extrabold');document.querySelectorAll('.card p').forEach(e=>e.className='mt-2 text-sm leading-6 text-slate-600');document.querySelectorAll('.card b').forEach(e=>e.className='text-sm text-slate-500');
+  document.querySelectorAll('.flow').forEach(e=>e.className='rounded-2xl bg-brand-50 p-4 ring-1 ring-brand-100');document.querySelectorAll('.flow b').forEach(e=>e.className='text-sm font-extrabold text-brand-800');document.querySelectorAll('.flow p').forEach(e=>e.className='mt-2 text-xs leading-5 text-brand-900/70');
+  document.querySelectorAll('.kpi').forEach(e=>e.className='rounded-3xl bg-white p-5 shadow-card ring-1 ring-slate-200');document.querySelectorAll('.kpi span').forEach(e=>e.className='text-sm font-bold text-slate-500');document.querySelectorAll('.kpi b').forEach(e=>e.className+=' mt-1 block text-3xl font-extrabold');
+  document.querySelectorAll('.col').forEach(e=>e.className='rounded-3xl bg-slate-100 p-4 ring-1 ring-slate-200');document.querySelectorAll('.colHead').forEach(e=>e.className='mb-4 flex items-center justify-between');document.querySelectorAll('.colHead h3').forEach(e=>e.className='font-extrabold');document.querySelectorAll('.colHead span').forEach(e=>e.className='rounded-full bg-brand-100 px-2 py-1 text-xs font-bold text-brand-700');
+  document.querySelectorAll('.ticket').forEach(e=>e.className+=' mb-3 rounded-2xl bg-white p-4 shadow-card ring-1 ring-slate-200');document.querySelectorAll('.ticket div').forEach(e=>e.className='flex justify-between gap-2');document.querySelectorAll('.ticket em').forEach(e=>e.className='rounded-full bg-slate-100 px-2 py-1 text-xs not-italic font-bold text-slate-600');document.querySelectorAll('.ticket p').forEach(e=>e.className='mt-2 text-sm text-slate-600');document.querySelectorAll('.ticket small').forEach(e=>e.className='mt-3 block text-xs font-bold text-slate-500');
+  document.querySelectorAll('.panel').forEach(e=>e.className='rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-200');document.querySelectorAll('.panel h2').forEach(e=>e.className='text-2xl font-extrabold');document.querySelectorAll('.panel p').forEach(e=>e.className+=' mt-1 text-sm text-slate-500');
+  document.querySelectorAll('label').forEach(e=>e.className=(e.className?e.className+' ':'')+'block text-sm font-bold text-slate-700');document.querySelectorAll('input,select,textarea').forEach(e=>e.className='mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 font-normal outline-none focus:border-brand-500');
+  document.querySelectorAll('.darkrow').forEach(e=>e.className='flex justify-between rounded-2xl bg-white/10 p-3');document.querySelectorAll('table').forEach(e=>e.className='w-full text-left text-sm');document.querySelectorAll('th').forEach(e=>e.className='bg-slate-50 px-4 py-3 text-xs uppercase tracking-wider text-slate-500');document.querySelectorAll('td').forEach(e=>e.className='border-t border-slate-200 px-4 py-4');
+  document.querySelectorAll('.queueitem').forEach(e=>e.className='rounded-3xl border border-slate-200 bg-white p-5');document.querySelectorAll('.queueitem h3').forEach(e=>e.className='mt-1 text-lg font-extrabold');document.querySelectorAll('.queueitem button').forEach(e=>e.className='mt-3 rounded-xl bg-slate-900 px-3 py-2 text-xs font-bold text-white');
+  document.querySelectorAll('.work').forEach(e=>e.className='rounded-3xl bg-white p-5 shadow-card ring-1 ring-slate-200');document.querySelectorAll('.work span').forEach(e=>e.className='text-sm font-bold text-slate-500');document.querySelectorAll('.work b').forEach(e=>e.className='mt-1 block text-3xl font-extrabold');document.querySelectorAll('.work i').forEach(e=>e.className+=' mt-2 block h-2 rounded-full');
+  document.querySelectorAll('.chart').forEach(e=>e.className='rounded-3xl bg-white p-6 shadow-card ring-1 ring-slate-200 h-96');document.querySelectorAll('.chart h3').forEach(e=>e.className='mb-4 font-extrabold');document.querySelectorAll('.mini').forEach(e=>e.className='rounded-2xl bg-slate-50 p-4');document.querySelectorAll('.mini span').forEach(e=>e.className='text-xs font-bold text-slate-500');document.querySelectorAll('.mini b').forEach(e=>e.className+=' mt-1 block font-extrabold');document.querySelectorAll('.timeline').forEach(e=>e.className='relative');document.querySelectorAll('.timeline b').forEach(e=>e.className='font-bold');
+  const titles={overview:'Executive Overview',kanban:'Kanban tổng quan',create:'Sale: Tạo yêu cầu',sale:'Sale: Yêu cầu của tôi',queue:'IED: Hàng đợi',lead:'Team Lead: Tải việc',dashboard:'Manager Dashboard',admin:'Admin Config',detail:'Ticket Detail'};let chartsReady=false;
+  function toast(m){const e=document.getElementById('toast');e.textContent=m;e.classList.remove('hidden');clearTimeout(window.__t);window.__t=setTimeout(()=>e.classList.add('hidden'),2400)}
+  function setScreen(name,push=true){if(!titles[name])name='overview';document.querySelectorAll('.screen').forEach(e=>e.classList.remove('active'));document.getElementById(name).classList.add('active');document.querySelectorAll('.nav').forEach(b=>b.classList.toggle('active',b.dataset.screen===name));document.querySelectorAll('.mob').forEach(b=>{b.className='mob whitespace-nowrap rounded-full px-3 py-2 text-xs font-bold '+(b.dataset.screen===name?'bg-slate-900 text-white':'bg-slate-100')});document.getElementById('title').textContent=titles[name];if(push)history.replaceState(null,'','#'+name);if(name==='dashboard')initCharts();scrollTo({top:0,behavior:'smooth'})}
+  document.querySelectorAll('[data-screen]').forEach(b=>b.onclick=()=>setScreen(b.dataset.screen));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>setScreen(b.dataset.go));addEventListener('hashchange',()=>setScreen(location.hash.slice(1),false));
+  function initCharts(){if(chartsReady||typeof Chart==='undefined')return;chartsReady=true;const o={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8}}}};new Chart(etaChart,{type:'doughnut',data:{labels:['Đúng ETA','Trễ ETA'],datasets:[{data:[94,6],backgroundColor:['#10b981','#ef4444'],borderWidth:0}]},options:o});new Chart(statusChart,{type:'pie',data:{labels:['Assigned','In Progress','Waiting Info','Completed'],datasets:[{data:[28,18,5,77],backgroundColor:['#3366ff','#f59e0b','#eab308','#10b981'],borderWidth:0}]},options:o});new Chart(trendChart,{type:'line',data:{labels:['01/07','02/07','03/07','04/07','05/07','06/07','07/07'],datasets:[{label:'Created',data:[12,18,14,20,16,10,21],borderColor:'#3366ff',backgroundColor:'rgba(51,102,255,.12)',tension:.35,fill:true},{label:'Completed',data:[10,14,16,18,15,9,17],borderColor:'#10b981',backgroundColor:'rgba(16,185,129,.10)',tension:.35,fill:true}]},options:{...o,scales:{y:{beginAtZero:true}}}});new Chart(demandChart,{type:'bar',data:{labels:['AGS1','AGS2','WGS1','WGS2'],datasets:[{label:'Completed',data:[24,19,16,18],backgroundColor:'#10b981'},{label:'Open',data:[9,12,7,8],backgroundColor:'#3366ff'},{label:'Waiting Info',data:[1,2,1,1],backgroundColor:'#f59e0b'}]},options:{...o,scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true}}}})}
+  setScreen(location.hash.slice(1)||'overview',false);
+</script>
+</body>
+</html>
